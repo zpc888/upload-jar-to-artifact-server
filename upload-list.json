@@ -1,0 +1,39 @@
+{
+	"libs": [
+		{
+		  "cfgName": "uploadInternal1"
+		  , "groupId": "com.prot.zbank.client"
+		  , "artifactId": "client-model"
+		  , "version": "0.0.8"
+		  , "jarLocation": "client/client-model.jar"
+		}
+		, {
+		  "cfgName": "uploadInternal2"
+		  , "groupId": "com.prot.zbank.client"
+		  , "artifactId": "client-model"
+		  , "classifier": "test"
+		  , "version": "0.0.8"
+		  , "jarLocation": "client/unit-test.jar"
+		}
+		, {
+		  "cfgName": "uploadInternal3"
+		  , "groupId": "com.prot.zbank.client"
+		  , "artifactId": "client-service"
+		  , "version": "0.0.9"
+		  , "jarLocation": "client/rest-api.jar"
+		}
+		, {
+		  "cfgName": "uploadOracleDriver"
+		  , "groupId": "com.oracle"
+		  , "artifactId": "ojdbc8"
+		  , "version": "0.2b"
+		  , "jarLocation": "3rd/ojdbc8.jar"
+		  , "repoUrl": "http://a.b.com/repository/third-party/"
+		  , "repoUser": "david"
+		  , "repoPswd": "Passw0rd888"
+		}
+	]
+    , "repoUrl": "http://a.b.com/repository/zbank-project-release/"
+	, "repoUser": "george"
+	, "repoPswd": "Passw0rd999"
+}

@@ -1,0 +1,49 @@
+// group "com.prot.build.tool"
+// version "${version}"
+
+apply plugin: 'maven'
+
+def f = file("upload-list.json")
+def m = f.exists() ? new groovy.json.JsonSlurper().parse(f) : null
+
+task batchUpload() {
+}
+
+if (m == null || m.libs == null || m.libs.isEmpty()) {
+    batchUpload.doLast {
+	    println "WARNING: no file to upload"
+	}
+} else {
+    m.libs.each { lib ->
+		configurations.create( "${lib.cfgName}" )
+		if (lib.classifier == null) {
+			artifacts.add("${lib.cfgName}", file("${lib.jarLocation}"))
+		} else {
+			artifacts.add("${lib.cfgName}", file("${lib.jarLocation}")) {
+				setClassifier( "${lib.classifier}" )
+			}
+		}
+
+		def repoUrl = lib.repoUrl != null ? lib.repoUrl : m.repoUrl;
+		def repoUser = lib.repoUser != null ? lib.repoUser : m.repoUser;
+		def repoPswd = lib.repoPswd != null ? lib.repoPswd : m.repoPswd;
+        def classifier = lib.classifier == null ? "" : ("-" + lib.classifier)
+        println "define task '${lib.cfgName}' to upload ${lib.jarLocation} to ${repoUrl} as ${lib.groupId}:${lib.artifactId}-${lib.version}${classifier}.jar"
+
+		project.tasks.create("${lib.cfgName}", Upload.class) {
+		    configuration = configurations[lib.cfgName]
+			repositories {
+			    mavenDeployer {
+					repository(url: "${repoUrl}") {
+						authentication(userName: "${repoUser}", password: "${repoPswd}")
+					}
+					pom.version = "${lib.version}"
+					pom.artifactId = "${lib.artifactId}"
+					pom.groupId = "${lib.groupId}"
+				}
+			}
+		}
+
+		batchUpload.dependsOn "${lib.cfgName}"
+	}
+}

@@ -1,0 +1,27 @@
+// group "com.prot.build.tool"
+// version "${version}"
+
+configurations {
+    oneLib
+}
+
+artifacts {
+    oneLib file("path-to/one-lib.jar")
+}
+
+apply plugin: 'maven'
+
+project.tasks.create('uploadOneLib', Upload.class) {
+	configuration = configurations.oneLib
+    repositories {
+        mavenDeployer {
+            repository(url: "${protReleaseUrl}") {
+				authentication(userName: "${protReleaseUser}", password: "${protReleasePswd}")
+			}
+			pom.version = "0.0.1"
+			pom.artifactId = "one-lib"
+			pom.groupId = "com.onelib"
+		}
+    }
+}
+
